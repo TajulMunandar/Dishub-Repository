@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h2 class="main-title mt-2 fw-semibold fs-3">Tabel Data Jabatan</h2>
+        <h2 class="main-title mt-2 fw-semibold fs-3">Tabel Data Bidang</h2>
 
         <div class="row">
             <div class="col-sm-6 col-md">
@@ -57,7 +57,7 @@
                                     {{-- Modal Edit Jabatan --}}
                                     <x-form_modal>
                                         @slot('id', "editJabatan$loop->iteration")
-                                        @slot('title', 'Edit Data jabatan')
+                                        @slot('title', 'Edit Data Bidang')
                                         @slot('route', route('jabatan.update', $jabatan->id))
                                         @slot('method') @method('put') @endslot
                                         @slot('btnPrimaryTitle', 'Perbarui')
@@ -79,14 +79,14 @@
                                     {{-- Modal Hapus Jabatan --}}
                                     <x-form_modal>
                                         @slot('id', "hapusJabatan$loop->iteration")
-                                        @slot('title', 'Hapus Data Jabatan')
+                                        @slot('title', 'Hapus Data Bidang')
                                         @slot('route', route('jabatan.destroy', $jabatan->id))
                                         @slot('method') @method('delete') @endslot
                                         @slot('btnPrimaryClass', 'btn-outline-danger')
                                         @slot('btnSecondaryClass', 'btn-secondary')
                                         @slot('btnPrimaryTitle', 'Hapus')
 
-                                        <p class="fs-5">Apakah anda yakin akan menghapus data jabatan
+                                        <p class="fs-5">Apakah anda yakin akan menghapus data Bidang
                                             <b>{{ $jabatan->name }}</b>?
                                         </p>
 
@@ -105,7 +105,7 @@
     <!-- Modal Tambah Jabatan -->
     <x-form_modal>
         @slot('id', 'tambahJabatan')
-        @slot('title', 'Tambah Data Jabatan')
+        @slot('title', 'Tambah Data Bidang')
         @slot('overflow', 'overflow-auto')
         @slot('route', route('jabatan.store'))
 

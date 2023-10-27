@@ -34,8 +34,8 @@
                                 <tr>
                                     <th>NO</th>
                                     <th>NAMA</th>
+                                    <th>BIDANG</th>
                                     <th>JABATAN</th>
-                                    <th>STATUS</th>
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
@@ -88,7 +88,7 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="id_jabatan" class="form-label">Jabatan</label>
+                                            <label for="id_jabatan" class="form-label">Bidang</label>
                                             <select class="form-select" id="id_jabatan" name="id_jabatan">
                                                 @foreach ($jabatans as $jabatan)
                                                     @if (old('id_jabatan', $staf->id_jabatan) == $jabatan->id)
@@ -105,7 +105,7 @@
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="isKetua" class="form-label">Status</label>
+                                            <label for="isKetua" class="form-label">Jabatan</label>
                                             <select class="form-select" id="isKetua" name="isKetua">
                                                 @foreach ([1 => 'Ketua', 2 => 'Anggota'] as $bool => $isKetua)
                                                     <option value="{{ $bool }}"
@@ -164,7 +164,7 @@
                 @enderror
             </div>
             <div class="mb-3">
-                <label for="id_jabatan" class="form-label">Jabatan</label>
+                <label for="id_jabatan" class="form-label">Bidang</label>
                 <select class="form-select" id="id_jabatan" name="id_jabatan">
                     @foreach ($jabatans as $jabatan)
                         <option value="{{ $jabatan->id }}">
@@ -174,7 +174,7 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="isKetua" class="form-label">Role</label>
+                <label for="isKetua" class="form-label">Jabatan</label>
                 <select class="form-select" id="isKetua" name="isKetua">
                     <option value="1" selected>Ketua</option>
                     <option value="2">Anggota</option>

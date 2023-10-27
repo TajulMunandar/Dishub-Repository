@@ -39,7 +39,7 @@ class JabatanController extends Controller
 
         Jabatan::create($validatedData);
 
-        return redirect()->route('jabatan.index')->with('success', 'Jabatan baru berhasil ditambahkan!');
+        return redirect()->route('jabatan.index')->with('success', 'Bidang baru berhasil ditambahkan!');
     }
 
     /**
@@ -72,7 +72,7 @@ class JabatanController extends Controller
 
             Jabatan::where('id', $jabatan->id)->update($validatedData);
 
-            return redirect()->route('jabatan.index')->with('success', "Data Jabatan $jabatan->name berhasil diperbarui!");
+            return redirect()->route('jabatan.index')->with('success', "Data Bidang $jabatan->name berhasil diperbarui!");
         } catch (\Illuminate\Validation\ValidationException $exception) {
             return redirect()->route('jabatan.index')->with('failed', 'Data gagal diperbarui! ' . $exception->getMessage());
         }
@@ -88,10 +88,10 @@ class JabatanController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == 23000) {
                 //SQLSTATE[23000]: Integrity constraint violation
-                return redirect()->route('jabatan.index')->with('failed', "Jabatan $jabatan->name tidak dapat dihapus, karena sedang digunakan pada tabel lain!");
+                return redirect()->route('jabatan.index')->with('failed', "Bidang $jabatan->name tidak dapat dihapus, karena sedang digunakan pada tabel lain!");
             }
         }
 
-        return redirect()->route('jabatan.index')->with('success', "Jabatan $jabatan->name berhasil dihapus!");
+        return redirect()->route('jabatan.index')->with('success', "Bidang $jabatan->name berhasil dihapus!");
     }
 }

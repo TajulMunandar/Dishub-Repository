@@ -34,7 +34,7 @@
                     <a class="nav-link has-arrow {{ Request::is('dashboard/jabatan') ? 'active' : '' }}"
                         href="/dashboard/jabatan">
                         <i class="fa-regular nav-icon fa-list me-2 fa-fw"></i>
-                        Jabatan
+                        Bidang
                     </a>
                 </li>
 

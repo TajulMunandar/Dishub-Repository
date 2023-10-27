@@ -28,7 +28,8 @@
                     <div class="card">
                         <div class="card-body">
                             <h3 class="card-title fw-bold">{{ strtoupper($berita->name) }} </h3>
-                            <p class="card-text mb-1">Staff : {{ $berita->staff->name }}
+                            <p class="card-text mb-1">Nama : {{ $berita->staff->name }}
+                            <p class="card-text mb-1">Staff : {{ $berita->staff->Jabatan->name }}
                             </p>
                             <p class="card-text mb-1">Tanggal : {{ $berita->created_at }}</p>
                             <p class="card-text">
@@ -136,7 +137,7 @@
             @csrf
             <div class="row">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
+                    <label for="name" class="form-label">Judul Kerja</label>
                     <input type="name" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
                         autofocus required>
                     @error('name')
