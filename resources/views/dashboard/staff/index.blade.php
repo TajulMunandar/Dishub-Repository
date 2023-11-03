@@ -35,6 +35,11 @@
                                     <th>NO</th>
                                     <th>NAMA</th>
                                     <th>BIDANG</th>
+                                    <th>TEMPAT/TANGGAL LAHIR</th>
+                                    <th>SK PERTAMA</th>
+                                    <th>TMT AKTIF</th>
+                                    <th>NO HP</th>
+                                    <th>EMAIL</th>
                                     <th>JABATAN</th>
                                     <th>ACTION</th>
                                 </tr>
@@ -45,6 +50,11 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $staf->name }}</td>
                                         <td>{{ $staf->jabatan->name }}</td>
+                                        <td>{{ $staf->tempat_lahir }} - {{ $staf->tanggal_lahir }}</td>
+                                        <td>{{ $staf->sk }}</td>
+                                        <td>{{ $staf->aktif }}</td>
+                                        <td>{{ $staf->hp }}</td>
+                                        <td>{{ $staf->email }}</td>
                                         <td>
                                             @php
                                                 if ($staf->isKetua == 1) {
@@ -105,6 +115,89 @@
                                         </div>
 
                                         <div class="mb-3">
+                                            <label for="tempat_lahir" class="form-label">Tempat Lahir</label>
+                                            <input type="name"
+                                                class="form-control @error('tempat_lahir') is-invalid @enderror"
+                                                id="tempat_lahir" name="tempat_lahir"
+                                                value="{{ old('tempat_lahir', $staf->tempat_lahir) }}"
+                                                autofocus required>
+                                            @error('tempat_lahir')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                                            <input type="date"
+                                                class="form-control @error('tanggal_lahir') is-invalid @enderror"
+                                                id="tanggal_lahir" name="tanggal_lahir"
+                                                value="{{ old('tanggal_lahir', $staf->tanggal_lahir) }}"
+                                                autofocus required>
+                                            @error('tanggal_lahir')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="text" class="form-control @error('email') is-invalid @enderror"
+                                                name="email" id="email" value="{{ $staf->email }}"
+                                                required>
+                                            @error('email')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="hp" class="form-label">No Hp</label>
+                                            <input type="text" class="form-control @error('hp') is-invalid @enderror"
+                                                name="hp" id="hp" value="{{ $staf->hp }}"
+                                                required>
+                                            @error('hp')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="sk" class="form-label">Surat Kerja Pertama</label>
+                                            <input type="text" class="form-control @error('sk') is-invalid @enderror"
+                                                name="sk" id="sk" value="{{ $staf->sk }}"
+                                                required>
+                                            @error('sk')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="aktif" class="form-label">aktif Aktif</label>
+                                            <input type="text" class="form-control @error('aktif') is-invalid @enderror"
+                                                name="aktif" id="aktif" value="{{ $staf->aktif }}" required>
+                                            @error('aktif')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="unit_kerja" class="form-label">Unit Kerja Asal</label>
+                                            <input type="text"
+                                                class="form-control @error('unit_kerja') is-invalid @enderror"
+                                                name="unit_kerja" id="unit_kerja" value="{{ $staf->unit_kerja }}"
+                                                required>
+                                            @error('unit_kerja')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+
+                                        <div class="mb-3">
                                             <label for="isKetua" class="form-label">Jabatan</label>
                                             <select class="form-select" id="isKetua" name="isKetua">
                                                 @foreach ([1 => 'Ketua', 2 => 'Anggota'] as $bool => $isKetua)
@@ -112,6 +205,22 @@
                                                         {{ old('isKetua', $staf->isKetua) == $bool ? 'selected' : '' }}>
                                                         {{ $isKetua }}
                                                     </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="id_user" class="form-label">User</label>
+                                            <select class="form-select" id="id_user" name="id_user">
+                                                @foreach ($users as $user)
+                                                    @if (old('id_user', $staf->id_user) == $user->id)
+                                                        <option value="{{ $user->id }}" selected>
+                                                            {{ $user->name }}
+                                                        </option>
+                                                    @else
+                                                        <option value="{{ $user->id }}">
+                                                            {{ $user->name }}
+                                                        </option>
+                                                    @endif
                                                 @endforeach
                                             </select>
                                         </div>
@@ -155,8 +264,8 @@
         <div class="row">
             <div class="mb-3">
                 <label for="name" class="form-label">Nama</label>
-                <input type="name" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
-                    autofocus required>
+                <input type="name" class="form-control @error('name') is-invalid @enderror" id="name"
+                    name="name" autofocus required>
                 @error('name')
                     <div class="invalid-feedback">
                         {{ $message }}

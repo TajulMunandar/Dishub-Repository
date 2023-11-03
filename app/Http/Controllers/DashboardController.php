@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BeritaAcara;
 use App\Models\Staff;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -16,7 +17,19 @@ class DashboardController extends Controller
         $staff = Staff::count();
         $approve = BeritaAcara::where('isApprove', 1)->count();
         $disapprove = BeritaAcara::where('isApprove', 0)->count();
-        return view('dashboard.index')->with(compact('staff', 'approve', 'disapprove'));
+
+        $now = Carbon::now();
+        $today = $now->format('Y-m-d');
+        $yesterday = $now->subDay()->format('Y-m-d');
+        $lastWeek = $now->subWeek()->format('Y-m-d');
+        $lastMonth = $now->subMonth()->format('Y-m-d');
+
+        $harian = BeritaAcara::whereDate('created_at', $today)->count();
+        $kemarin = BeritaAcara::whereDate('created_at', $yesterday)->count();
+        $minggu_lalu = BeritaAcara::whereBetween('created_at', [$lastWeek, $yesterday])->count();
+        $bulan_lalu = BeritaAcara::whereBetween('created_at', [$lastMonth, $lastWeek])->count();
+
+        return view('dashboard.index')->with(compact('staff', 'approve', 'disapprove', 'harian', 'kemarin', 'minggu_lalu', 'bulan_lalu'));
     }
 
     /**

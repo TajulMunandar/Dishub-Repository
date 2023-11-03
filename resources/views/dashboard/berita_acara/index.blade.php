@@ -20,8 +20,30 @@
             </div>
         </div>
 
-        <button class="btn btn-primary fs-5 fw-normal mt-2" data-bs-toggle="modal" data-bs-target="#tambahBerita"><i
-                class="fa-solid fa-square-plus fs-5 me-2"></i>Tambah</button>
+        <div class="col-12 mb-4 d-flex">
+            <div class="col-8">
+                @if (!auth()->user()->Staff->isKetua == 1 || auth()->user()->isAdmin == 1)
+                    <button class="btn btn-primary fs-5 fw-normal mt-2" data-bs-toggle="modal"
+                        data-bs-target="#tambahBerita"><i class="fa-solid fa-square-plus fs-5 me-2"></i>Tambah</button>
+                @endif
+            </div>
+
+            <div class="col-4">
+                <form action="{{ route('berita.index') }}" method="GET">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="search" placeholder="Cari Daftar Hadir"
+                            aria-label="Example text with two button addons">
+                        <button class="btn btn-secondary" type="submit">Cari</button>
+                        <a class="btn btn-secondary" type="button" href="{{ route('berita.index') }}">Reset</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if (isset($search))
+            <p>Hasil Pencarian untuk: <strong>{{ $search }}</strong></p>
+        @endif
+
         <div class="row mt-3">
             @forelse ($beritas as $berita)
                 <div class="col-sm-6 col-lg-4 mb-4">
@@ -51,14 +73,15 @@
                                 </div>
 
                                 {{-- Admin only --}}
-                                @if (auth()->user()->isAdmin == 1)
+                                @if (auth()->user()->isAdmin == 1 || auth()->user()->staff->isKetua == 1)
                                     <button class="btn btn-info text-white" data-bs-toggle="modal"
                                         data-bs-target="#approveModal{{ $loop->iteration }}">
                                         <i class="fa-regular fa-file-check"></i>
                                     </button>
                                 @endif
                                 {{-- Admin only --}}
-                                <a href="{{ route('berita-template.pdf', $berita->id) }}" type="button" class="btn btn-secondary text-white">
+                                <a href="{{ route('berita-template.pdf', $berita->id) }}" type="button"
+                                    class="btn btn-secondary text-white">
                                     <i class="fa-solid fa-print"></i>
                                 </a>
                                 <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
@@ -120,55 +143,94 @@
                     </div>
                 </div>
                 {{-- /Modal approve --}}
+
                 @empty
                     <P class="fs-5 text-center">Berita Acara Belum Ada</P>
                 @endforelse
-            </div>
-        </div>
-        </div>
+                {{-- paginasi --}}
+                <div class="row my-4">
+                    <div class="col-12">
+                        <ul class="pagination justify-content-center">
+                            {{-- Previous Page Link --}}
+                            @if ($beritas->onFirstPage())
+                                <li class="page-item disabled">
+                                    <span class="page-link">Previous</span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $beritas->previousPageUrl() }}"
+                                        rel="prev">Previous</a>
+                                </li>
+                            @endif
 
-        <!-- Modal Tambah berita -->
-        <x-form_modal>
-            @slot('id', 'tambahBerita')
-            @slot('title', 'Tambah Data Berita')
-            @slot('overflow', 'overflow-auto')
-            @slot('route', route('berita.store'))
+                            {{-- Pagination Elements --}}
+                            @for ($i = 1; $i <= $beritas->lastPage(); $i++)
+                                <li class="page-item {{ $i == $beritas->currentPage() ? 'active' : '' }}">
+                                    <a class="page-link" href="{{ $beritas->url($i) }}">{{ $i }}</a>
+                                </li>
+                            @endfor
 
-            @csrf
-            <div class="row">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Judul Kerja</label>
-                    <input type="name" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
-                        autofocus required>
-                    @error('name')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                    @enderror
+                            {{-- Next Page Link --}}
+                            @if ($beritas->hasMorePages())
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $beritas->nextPageUrl() }}" rel="next">Next</a>
+                                </li>
+                            @else
+                                <li class="page-item disabled">
+                                    <span class="page-link">Next</span>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
                 </div>
-                @if (auth()->user()->isAdmin == 1)
-                    <div class="mb-3">
-                        <label for="id_staff" class="form-label">Staff</label>
-                        <select class="form-select" id="id_staff" name="id_staff">
-                            @foreach ($staff as $staf)
-                                <option value="{{ $staf->id }}">
-                                    {{ $staf->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                @else
-                    <div class="mb-3">
-                        <label for="id_staff" class="form-label">Staff</label>
-                        <select class="form-select" id="id_staff" name="id_staff" disabled>
-                            <option value="{{ $staff->id }}">
-                                {{ $staff->name }}
-                            </option>
-                        </select>
-                    </div>
-                @endif
-
             </div>
-        </x-form_modal>
-        <!-- Akhir Modal Tambah berita -->
+        </div>
+        </div>
+
+        @if (!auth()->user()->Staff->isKetua == 1 || auth()->user()->isAdmin == 1)
+            <!-- Modal Tambah berita -->
+            <x-form_modal>
+                @slot('id', 'tambahBerita')
+                @slot('title', 'Tambah Data Berita')
+                @slot('overflow', 'overflow-auto')
+                @slot('route', route('berita.store'))
+
+                @csrf
+                <div class="row">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Judul Kerja</label>
+                        <input type="name" class="form-control @error('name') is-invalid @enderror" id="name"
+                            name="name" autofocus required>
+                        @error('name')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    @if (auth()->user()->isAdmin == 1)
+                        <div class="mb-3">
+                            <label for="id_staff" class="form-label">Staff</label>
+                            <select class="form-select" id="id_staff" name="id_staff">
+                                @foreach ($staff as $staf)
+                                    <option value="{{ $staf->id }}">
+                                        {{ $staf->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @else
+                        <div class="mb-3">
+                            <label for="id_staff" class="form-label">Staff</label>
+                            <select class="form-select" id="id_staff" name="id_staff" disabled>
+                                <option value="{{ $staff->id }}">
+                                    {{ $staff->name }}
+                                </option>
+                            </select>
+                        </div>
+                    @endif
+
+                </div>
+            </x-form_modal>
+            <!-- Akhir Modal Tambah berita -->
+        @endif
     @endsection

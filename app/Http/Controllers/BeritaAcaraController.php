@@ -14,16 +14,30 @@ class BeritaAcaraController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
         if (auth()->user()->isAdmin == 1) {
             $staff = Staff::all();
-            $beritas = BeritaAcara::all();
-        } else {
+            $beritas = BeritaAcara::orderBy('isApprove')->when($search, function ($query) use ($search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })->orderBy('created_at', 'desc')->paginate(9);
+        } elseif (auth()->user()->isAdmin == 2 && auth()->user()->staff->isKetua == 2) {
             $staff = Staff::where('id_user', auth()->user()->id)->first();
-            $beritas = BeritaAcara::where('id_staff', $staff->id)->get();
+            $beritas = BeritaAcara::where('id_staff', $staff->id)->when($search, function ($query) use ($search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })->orderBy('isApprove')->orderBy('created_at', 'desc')->paginate(9);
+        } elseif (auth()->user()->isAdmin == 2 && auth()->user()->staff->isKetua == 1) {
+            $jabatan = auth()->user()->Staff->id_jabatan;
+            $staff = Staff::all();
+            $beritas = BeritaAcara::whereHas('staff', function ($query) use ($jabatan) {
+                $query->where('id_jabatan', $jabatan);
+            })->when($search, function ($query) use ($search) {
+                return $query->where('name', 'like', '%' . $search . '%');
+            })->orderBy('isApprove')->orderBy('created_at', 'desc')->paginate(9);
         }
-        return view('dashboard.berita_acara.index')->with(compact('beritas', 'staff'));
+
+        return view('dashboard.berita_acara.index')->with(compact('beritas', 'staff', 'search'));
     }
 
     /**
@@ -124,13 +138,15 @@ class BeritaAcaraController extends Controller
     public function generatePDF(BeritaAcara $berita)
     {
         $details = BeritaAcaraDetail::where('id_berita', $berita->id)->get();
+        $jabatan = $berita->staff->jabatan->id;
+        $atasan = Staff::where('id_jabatan', $jabatan)->where('isKetua', 1)->get();
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
 
         $pdf = new Dompdf();
 
-        $htmlContent = view('dashboard.template.berita', compact('berita', 'details'))->render();
+        $htmlContent = view('dashboard.template.berita', compact('berita', 'details', 'atasan'))->render();
         $pdf->loadHtml($htmlContent);
         $pdf->setPaper('A4', 'potrait');
 

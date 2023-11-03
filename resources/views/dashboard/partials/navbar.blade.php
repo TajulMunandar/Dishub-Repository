@@ -16,16 +16,20 @@
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
                 <ul class="list-unstyled">
                     <li>
-                        <form action="/logout" method="post">
-                            @csrf
-                            <button class="dropdown-item">
-                                <i class="fa-regular dropdown-item-icon fa-arrow-right-from-bracket me-1 fa-fw"></i>
-                                Logout
-                            </button>
-                        </form>
+                    <li>
+                        <a class="dropdown-item"href="/profile">
+                            <i class="fa-regular dropdown-item-icon fa-user me-1 fa-fw"></i>Profile
+                        </a>
                     </li>
-                </ul>
+                    <form action="/logout" method="post">
+                        @csrf
+                        <button class="dropdown-item">
+                            <i class="fa-regular dropdown-item-icon fa-arrow-right-from-bracket me-1 fa-fw"></i>
+                            Logout
+                        </button>
+                    </form>
             </div>
         </li>
+    </ul>
     </ul>
 </nav>

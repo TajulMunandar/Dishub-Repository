@@ -15,6 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('id_jabatan')->constrained('jabatans')->restrict('onDelete')->cascade('onUpdate');
+            $table->text('tempat_lahir')->nullable();
+            $table->date('tanggal_lahir')->nullable();
+            $table->text('sk')->nullable();
+            $table->string('aktif')->nullable();
+            $table->string('hp')->nullable();
+            $table->string('email')->nullable();
+            $table->string('unit_kerja')->nullable();
             $table->boolean('isKetua');
             $table->foreignId('id_user')->constrained('users')->restrict('onDelete')->cascade('onUpdate');
             $table->timestamps();

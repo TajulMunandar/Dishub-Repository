@@ -21,6 +21,7 @@ class StaffController extends Controller
                 'title' => 'Data Staff',
                 'staff' => Staff::all(),
                 'jabatans' => Jabatan::all(),
+                'users' => User::all(),
             ]
         );
     }
@@ -87,9 +88,17 @@ class StaffController extends Controller
     {
         try {
             $rules = [
-                'name' => 'required|max:255',
+                'name' => 'required',
                 'id_jabatan' => 'required',
+                'tempat_lahir' => 'required',
+                'tanggal_lahir' => 'required',
+                'sk' => 'required',
+                'aktif' => 'required',
+                'hp' => 'required',
+                'email' => 'required',
+                'unit_kerja' => 'required',
                 'isKetua' => 'required',
+                'id_user' => 'required',
             ];
 
             $validatedData = $this->validate($request, $rules);
