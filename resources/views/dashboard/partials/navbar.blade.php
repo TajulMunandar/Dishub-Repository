@@ -10,7 +10,7 @@
                 aria-haspopup="true" aria-expanded="false">
                 <div class="p-1 text-black fw-semibold p-2">
                     <i class="fa-solid fa-user mx-1"></i>
-                    {{ auth()->user()->name }}
+                    {{ auth()->user()->Staff->name }}
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
