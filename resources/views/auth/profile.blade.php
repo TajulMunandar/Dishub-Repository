@@ -54,7 +54,7 @@
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" id="name" value="{{ auth()->user()->name }}" required>
+                                        name="name" id="name" value="{{ auth()->user()->staff->name }}" required>
                                     @error('name')
                                         <div class="invalid-feedback">
                                             {{ $message }}

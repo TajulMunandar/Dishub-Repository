@@ -22,7 +22,7 @@
 
         <div class="col-12 mb-4 d-flex">
             <div class="col-8">
-                @if (!auth()->user()->Staff->isKetua == 1 || auth()->user()->isAdmin == 1)
+                @if (auth()->user()->Staff->isKetua == 2 || auth()->user()->isAdmin == 1)
                     <button class="btn btn-primary fs-5 fw-normal mt-2" data-bs-toggle="modal"
                         data-bs-target="#tambahBerita"><i class="fa-solid fa-square-plus fs-5 me-2"></i>Tambah</button>
                 @endif
@@ -185,9 +185,8 @@
                 </div>
             </div>
         </div>
-        </div>
 
-        @if (!auth()->user()->Staff->isKetua == 1 || auth()->user()->isAdmin == 1)
+        @if (auth()->user()->Staff->isKetua == 2 || auth()->user()->isAdmin == 1)
             <!-- Modal Tambah berita -->
             <x-form_modal>
                 @slot('id', 'tambahBerita')
